@@ -1,30 +1,168 @@
-<h1>Clients</h1>
-<div><%= link_to 'New', new_client_path %></div>
+<div class="panel-group" id="doing" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#doing" href="#add-new-client" aria-expanded="false" aria-controls="add-new-client">
+          Add new client
+        </a>
+      </h4>
+    </div>
+    <div id="add-new-client" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <%= render partial: 'clients/form', locals: { client: Client.new } %>
+      </div>
+    </div>
+  </div>
+  <% current_user.clients.sort.each do |client| %>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#doing" href="#<%= client.name.gsub(' ', '_') %>" aria-expanded="true" aria-controls="<%= client.name.gsub(' ', '_') %>">
+            <%= client.name %>
+          </a>
+        </h4>
+      </div>
+      <div id="<%= client.name.gsub(' ', '_') %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
 
-<% current_user.clients.each do |client| %>
-  <h2><%= client.name %></h2>
 
-  <h3>Projects</h3>
-  <div><%= link_to 'New', new_project_path(client_id: client.id) %></div>
-  <% client.projects.each do |project| %>
-    <h4><%= project.name %></h4>
+          <div class="panel-group" id="<%= client.name.gsub(' ', '_') %>" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab">
+                <h4 class="panel-title">
+                  <a role="button" data-toggle="collapse" data-parent="#<%= client.name.gsub(' ', '_') %>" href="#<%= client.name.gsub(' ', '_') %>-add-new-project" aria-expanded="false" aria-controls="<%= client.name.gsub(' ', '_') %>-add-new-project">
+                    Add new project
+                  </a>
+                </h4>
+              </div>
+              <div id="<%= client.name.gsub(' ', '_') %>-add-new-project" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                  <%= render partial: 'projects/form', locals: { project: Project.new(client: client) } %>
+                </div>
+              </div>
+            </div>
+            <% client.projects.each do |project| %>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#<%= client.name %>" href="#<%= project.name.gsub(' ', '_') %>" aria-expanded="true" aria-controls="<%= project.name.gsub(' ', '_') %>">
+                      <%= project.name %>
+                    </a>
+                  </h4>
+                </div>
+                <div id="<%= project.name.gsub(' ', '_') %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body">
 
-    <h5>Tasks</h5>
-    <div><%= link_to 'New', new_task_path(project_id: project.id) %></div>
-    <% project.tasks.each do |task| %>
-      <div><%= task.name %></div>
-    <% end %>
 
-    <h5>Questions</h5>
-    <div><%= link_to 'New', new_question_path(project_id: project.id) %></div>
-    <% project.questions.each do |question| %>
-      <div><%= question.text %></div>
-    <% end %>
+                    <div class="panel-group" id="<%= project.name %>-tasks" role="tablist" aria-multiselectable="true">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                          <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#<%= project.name.gsub(' ', '_') %>" href="#<%= project.name.gsub(' ', '_') %>-add-new-task" aria-expanded="false" aria-controls="<%= project.name.gsub(' ', '_') %>-add-new-project">
+                              Add new task
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="<%= project.name.gsub(' ', '_') %>-add-new-task" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            <%= render partial: 'tasks/form', locals: { task: Task.new(project: project) } %>
+                          </div>
+                        </div>
+                      </div>
+                      <% project.tasks.each do |task| %>
+                        <div class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#<%= project.name %>-tasks" href="#<%= task.name.gsub(' ', '_').gsub('`', '') %>" aria-expanded="true" aria-controls="<%= task.name.gsub(' ', '_').gsub('`', '') %>">
+                                Task: <%= task.name %>
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="<%= task.name.gsub(' ', '_').gsub('`', '') %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                              <%= task.link %>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
 
-    <h6>Reading</h6>
-    <div><%= link_to 'New', new_reading_path(project_id: project.id) %></div>
-    <% project.readings.each do |reading| %>
-      <div><%= reading.title %></div>
-    <% end %>
+                    <div class="panel-group" id="<%= project.name %>-questions" role="tablist" aria-multiselectable="true">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                          <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#<%= project.name.gsub(' ', '_') %>" href="#<%= project.name.gsub(' ', '_') %>-add-new-question" aria-expanded="false" aria-controls="<%= project.name.gsub(' ', '_') %>-add-new-project">
+                              Add new question
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="<%= project.name.gsub(' ', '_') %>-add-new-question" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            <%= render partial: 'questions/form', locals: { question: Question.new(project: project) } %>
+                          </div>
+                        </div>
+                      </div>
+                      <% project.questions.each do |question| %>
+                        <div class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#<%= project.name %>-questions" href="#<%= question.text.gsub('?', '').gsub(':', '').gsub(' ', '_').gsub('`', '') %>" aria-expanded="true" aria-controls="<%= question.text.gsub('?', '').gsub(':', '').gsub(' ', '_').gsub('`', '') %>">
+                                Question: <%= question.text %>
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="<%= question.text.gsub(' ', '_').gsub('?', '').gsub(':', '').gsub('`', '') %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                              <%= question.answer %>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+
+                    <div class="panel-group" id="<%= project.name %>-readings" role="tablist" aria-multiselectable="true">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                          <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#<%= project.name.gsub(' ', '_') %>" href="#<%= project.name.gsub(' ', '_') %>-add-new-reading" aria-expanded="false" aria-controls="<%= project.name.gsub(' ', '_') %>-add-new-project">
+                              Add new reading
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="<%= project.name.gsub(' ', '_') %>-add-new-reading" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            <%= render partial: 'readings/form', locals: { reading: Reading.new(project: project) } %>
+                          </div>
+                        </div>
+                      </div>
+                      <% project.readings.each do |reading| %>
+                        <div class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#<%= project.name %>-readings" href="#<%= reading.title.gsub(' ', '_').gsub('?', '').gsub(':', '').gsub('`', '') %>" aria-expanded="true" aria-controls="<%= reading.title.gsub(' ', '_').gsub('?', '').gsub(':', '').gsub('`', '') %>">
+                                Reading: <%= reading.title %>
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="<%= reading.title.gsub(' ', '_').gsub('?', '').gsub(':', '').gsub('`', '') %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                              <%= reading.link %>
+                            </div>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
   <% end %>
-<% end %>
+</div>
