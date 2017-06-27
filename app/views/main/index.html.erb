@@ -1,0 +1,30 @@
+<h1>Clients</h1>
+<div><%= link_to 'New', new_client_path %></div>
+
+<% current_user.clients.each do |client| %>
+  <h2><%= client.name %></h2>
+
+  <h3>Projects</h3>
+  <div><%= link_to 'New', new_project_path(client_id: client.id) %></div>
+  <% client.projects.each do |project| %>
+    <h4><%= project.name %></h4>
+
+    <h5>Tasks</h5>
+    <div><%= link_to 'New', new_task_path(project_id: project.id) %></div>
+    <% project.tasks.each do |task| %>
+      <div><%= task.name %></div>
+    <% end %>
+
+    <h5>Questions</h5>
+    <div><%= link_to 'New', new_question_path(project_id: project.id) %></div>
+    <% project.questions.each do |question| %>
+      <div><%= question.text %></div>
+    <% end %>
+
+    <h6>Reading</h6>
+    <div><%= link_to 'New', new_reading_path(project_id: project.id) %></div>
+    <% project.readings.each do |reading| %>
+      <div><%= reading.title %></div>
+    <% end %>
+  <% end %>
+<% end %>

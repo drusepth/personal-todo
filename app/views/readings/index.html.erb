@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Readings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Link</th>
+      <th>Project</th>
+      <th>Read at</th>
+      <th>Notes</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @readings.each do |reading| %>
+      <tr>
+        <td><%= reading.title %></td>
+        <td><%= reading.link %></td>
+        <td><%= reading.project %></td>
+        <td><%= reading.read_at %></td>
+        <td><%= reading.notes %></td>
+        <td><%= link_to 'Show', reading %></td>
+        <td><%= link_to 'Edit', edit_reading_path(reading) %></td>
+        <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Reading', new_reading_path %>
